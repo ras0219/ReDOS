@@ -1,0 +1,15 @@
+ipch/*
+*.obj
+*.cod
+*.tlog
+*.log
+*.manifest
+*.lastbuildstate
+*.pdb
+*.exe
+*.map
+*.user
+*.sdf
+*.suo
+*.opensdf
+dev_kernel_grub.img
