@@ -24,7 +24,7 @@ void Console::push_attribs(COLOR_CODE fg, COLOR_CODE bg)
     {
         --attribs;
         // ERROR! STACK OVERFLOW
-        RSoD("ERROR, COLOR ATTRIB STACK OVERFLOW.",0xCAFEBABE);
+        RSoD("ERROR, COLOR ATTRIB STACK OVERFLOW.",(uint32_t)_ReturnAddress());
     }
     set_attribs(fg, bg);
 }
@@ -35,7 +35,7 @@ void Console::pop_attribs()
     {
         ++attribs;
         // ERROR! STACK UNDERFLOW
-        RSoD("ERROR, COLOR ATTRIB STACK UNDERFLOW.",0xDEADBEEF);
+        RSoD("ERROR, COLOR ATTRIB STACK UNDERFLOW.",(uint32_t)_ReturnAddress());
     }
 }
 
@@ -74,7 +74,7 @@ void Console::_putc(const char c)
             }
         }
 	    CONSOLE_STARTADDR[x_pos + y_pos * CONSOLE_WIDTH] = *attribs;
-        break;
+        return;
     default:
 	    CONSOLE_STARTADDR[x_pos + y_pos * CONSOLE_WIDTH] = c | *attribs;
 	    x_pos += 1;

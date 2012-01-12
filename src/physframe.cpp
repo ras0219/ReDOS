@@ -13,7 +13,7 @@ void PhysFramePool::init_pool(PhysFrame * start, PhysFrame * end)
     }
     first = start;
     last = end - 1;
-    while (start + 1 != end)
+    while (start + 1 < end)
     {
         start -> next_free = start + 1;
         ++start;
@@ -27,7 +27,14 @@ void PhysFramePool::append_pool(PhysFramePool * p)
     {
         return;
     }
-    last -> next_free = p -> first;
+    if (num_frames == 0)
+    {
+        first = p -> first;
+    }
+    else
+    {
+        last -> next_free = p -> first;
+    }
     last = p -> last;
     num_frames += p -> num_frames;
 
@@ -55,7 +62,7 @@ PhysFrame * PhysFramePool::alloc_frame()
 
 void PhysFramePool::dealloc_frame(PhysFrame * f)
 {
-#ifdef _DEBUG
+#ifdef REDOS_DEBUG
     if (f == NULL)
     {
         return;

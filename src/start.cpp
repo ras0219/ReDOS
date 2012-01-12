@@ -13,14 +13,15 @@
 // Inject symbol at end of kernel to know size
 #pragma section(".rsrc$9a",read)
 #pragma data_seg(push, ".rsrc$9a")
-#pragma const_seg(push, ".rsrc$9a")
+//#pragma const_seg(push, ".rsrc$9a")
 
-uint32_t __end_of_kernel = (uint32_t)&__end_of_kernel;
+uint32_t __end_of_kernel = 0;
 
 // Ensure our critical data gets linked in the right order
 #pragma code_seg(push, ".text$1b")
 #pragma data_seg(".text$1a")
-#pragma const_seg(".text$1a")
+//#pragma const_seg(".text$1a")
+#pragma const_seg(push,".text$1a")
 
 // Forward declaration
 extern "C" __declspec(noreturn) void __kernel_entry();
@@ -61,24 +62,30 @@ static struct MultibootHeader mbhdr = {
 
 #pragma data_seg(pop)
 #pragma const_seg(pop)
+
 #pragma code_seg(".text$2a")
 
 extern "C" __declspec(naked) __declspec(noreturn) void __kernel_entry()
 {
     __asm
     {
-        lea esp, __end_of_kernel + KRNL_STACK_SIZE
+        lea esp, [__end_of_kernel + 0x1FFFC]
+        and esp, 0xFFFFF000
         xor ecx, ecx
         push ecx
         popf // clear EFLAGS
 
-        //push eax
-        //push ebx
+        // These register values are passed from grub (they're important!)
+        push eax
+        push ebx
     }
 
     kernel();
 
-    __asm hlt
+    for(;;)
+    {
+        __halt();
+    }
 }
 
 #pragma code_seg(pop)

@@ -13,3 +13,6 @@ ipch/*
 *.suo
 *.opensdf
 dev_kernel_grub.img
+*.unsuccessfulbuild
+*.idb
+run/bochsout.txt

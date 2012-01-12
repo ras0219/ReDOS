@@ -3,7 +3,7 @@
 
 #define NULL 0
 // debug mode
-#define _DEBUG
+#define REDOS_DEBUG
 
 #pragma warning(disable:4127)
 #pragma code_seg(".text$5")

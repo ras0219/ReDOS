@@ -7,10 +7,13 @@ namespace Memory
 {
     struct PhysFrame
     {
-        static const size_t NUM_ENTRIES = 1024;
+        static const size_t FRAME_SIZE = 0x1000;
+        static const size_t PADDING_SIZE = FRAME_SIZE - sizeof(PhysFrame*);
+        static const size_t NUM_ENTRIES = PADDING_SIZE / sizeof(uint32_t);
         PhysFrame * next_free;
-        uint32_t padding[NUM_ENTRIES - 1];
+        uint32_t padding[NUM_ENTRIES];
     };
+
     struct PhysFramePool
     {
         PhysFrame * first;

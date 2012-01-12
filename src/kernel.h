@@ -14,7 +14,7 @@ void __declspec(noreturn) RSoD(const char * info,
 namespace KRNL
 {
     #define KRNL_STACK_SIZE 0x2000
-    //const size_t STACK_SIZE = 0x2000;
+    //const size_t STACK_SIZE = 0x2000; Didn't properly optimize, for some reason
     extern IDT::IDT_Table idt;
 }
 
