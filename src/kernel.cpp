@@ -5,8 +5,11 @@
 #include "irq.h"
 #include "vmm.h"
 
+using namespace KRNL;
+
 Memory::PhysFramePool krnl_mem;
 Memory::PhysFramePool proc_mem;
+Memory::PDirectory * KRNL::kernelpd;
 extern uint32_t __end_of_kernel;
 
 void kernel()
@@ -54,25 +57,20 @@ void kernel()
     cnsl << ']';
 
     // Allocate range of 78 pages (480 KB)
-    krnl_mem.init_pool((Memory::PhysFrame*)0x00008000, (Memory::PhysFrame*)0x00080000);
-    proc_mem.init_pool((Memory::PhysFrame*)(((uint32_t)&__end_of_kernel + 0x1FFFC) & 0xFFFF000), (Memory::PhysFrame*)0x00200000);
+    krnl_mem.init_pool(0x00008000,
+                       0x00080000);
+    proc_mem.init_pool((((uint32_t)&__end_of_kernel + 0x1FFFC) & 0xFFFF000),
+                       0x00200000);
 
-    Memory::PDT * kernelpdt = Memory::init_physical_pdt(&krnl_mem);
+    kernelpd = Memory::init_physical_pdt(&krnl_mem);
+    Memory::set_current_pd(kernelpd);
 
     cnsl.push_attribs(VGA::BLUE, VGA::BLACK);
     cnsl << "\b\b\b\b\b OK ";
     cnsl.pop_attribs();
     cnsl << "]\r\n";
 
-    __asm
-    {
-        mov eax, kernelpdt
-        mov cr3, eax
- 
-        mov eax, cr0
-        or eax, 0x80000000
-        mov cr0, eax
-    }
+    *(uint32_t*)(0x10000000) = 1;
 
     for(;;)
     {

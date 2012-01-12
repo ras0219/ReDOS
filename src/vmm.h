@@ -7,7 +7,10 @@
 
 namespace Memory
 {
-    struct PTEntry
+    extern PhysFramePool * kernel_mem_pool;
+    extern PhysFramePool * process_mem_pool;
+
+    struct PTable
     {
         static const uint32_t PRESENT_MASK = 0x00000001;
         static const uint32_t RW_MASK = 0x00000002;
@@ -19,14 +22,14 @@ namespace Memory
         static const uint32_t G_MASK = 0x00000100;
         static const uint32_t AVAIL_MASK = 0x00000E00;
         static const uint32_t ADDR_MASK = 0xFFFFF000;
-        uint32_t entry;
+        uint32_t entries[1024];
 
-        inline void * addr()
+        inline void * addr(uint32_t eno)
         {
-            return (void*)(entry && ADDR_MASK);
+            return (void*)(entries[eno] && ADDR_MASK);
         }
     };
-    struct PDEntry
+    struct PDirectory
     {
         static const uint32_t PRESENT_MASK = 0x00000001;
         static const uint32_t RW_MASK = 0x00000002;
@@ -37,21 +40,17 @@ namespace Memory
         static const uint32_t SIZE_MASK = 0x00000080;
         static const uint32_t AVAIL_MASK = 0x00000E00;
         static const uint32_t ADDR_MASK = 0xFFFFF000;
-        uint32_t entry;
+        uint32_t entries[1024];
 
-        inline PTEntry * addr()
+        inline PTable * addr(uint32_t eno)
         {
-            return (PTEntry*)(entry && ADDR_MASK);
+            return (PTable*)(entries[eno] && ADDR_MASK);
         }
     };
-    struct PDT
-    {
-        static const size_t NUM_ENTRIES = 4096 / sizeof(PDEntry*);
-        PDEntry entries[NUM_ENTRIES];
-    };
 
-    PDT * init_physical_pdt(PhysFramePool * frame_pool);
-
+    PDirectory * init_physical_pdt(PhysFramePool * frame_pool);
+    PDirectory * get_current_pd();
+    void set_current_pd(PDirectory * pd);
     uint32_t page_fault_isr(REGS * _r);
 }
 

@@ -4,6 +4,7 @@
 #include "stdinc.h"
 #include "machine.h"
 #include "idt.h"
+#include "vmm.h"
 
 void kernel();
 
@@ -16,6 +17,7 @@ namespace KRNL
     #define KRNL_STACK_SIZE 0x2000
     //const size_t STACK_SIZE = 0x2000; Didn't properly optimize, for some reason
     extern IDT::IDT_Table idt;
+    extern Memory::PDirectory * kernelpd;
 }
 
 #endif

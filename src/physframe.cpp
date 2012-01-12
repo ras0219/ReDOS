@@ -2,7 +2,16 @@
 
 using namespace Memory;
 
-void PhysFramePool::init_pool(PhysFrame * start, PhysFrame * end)
+struct Memory::PhysFrame
+{
+    static const size_t FRAME_SIZE = 0x1000;
+    static const size_t PADDING_SIZE = FRAME_SIZE - sizeof(PhysFrame*);
+    static const size_t NUM_ENTRIES = PADDING_SIZE / sizeof(uint32_t);
+    PhysFrame * next_free;
+    uint32_t padding[NUM_ENTRIES];
+};
+
+void PhysFramePool::_init_pool(PhysFrame * start, PhysFrame * end)
 {
     if (start >= end)
     {
@@ -43,7 +52,7 @@ void PhysFramePool::append_pool(PhysFramePool * p)
     p -> num_frames = 0;
 }
 
-PhysFrame * PhysFramePool::alloc_frame()
+PhysFrame * PhysFramePool::_alloc_frame()
 {
     if (num_frames == 0)
     {
@@ -60,7 +69,24 @@ PhysFrame * PhysFramePool::alloc_frame()
     return ret;
 }
 
-void PhysFramePool::dealloc_frame(PhysFrame * f)
+PhysFrame * PhysFramePool::_alloc_mapped_frame(PhysFrame * logical_addr)
+{
+    if (num_frames == 0)
+    {
+        return NULL;
+    }
+
+    --num_frames;
+    if (num_frames == 0)
+    {
+        last = NULL;
+    }
+    PhysFrame * ret = first;
+    first = first -> next_free;
+    return ret;
+}
+
+void PhysFramePool::_dealloc_frame(PhysFrame * f)
 {
 #ifdef REDOS_DEBUG
     if (f == NULL)
