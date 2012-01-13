@@ -9,26 +9,26 @@
 namespace VGA {
 
     static uint16_t * const CONSOLE_STARTADDR = (uint16_t*)0xB8000;
-	static const uint8_t CONSOLE_WIDTH = 80;
-	static const uint8_t CONSOLE_HEIGHT = 25;
+    static const uint8_t CONSOLE_WIDTH = 80;
+    static const uint8_t CONSOLE_HEIGHT = 25;
 
     enum COLOR_CODE :uint8_t {
-	    BLACK         = 0,
-	    BLUE          = 1,
-	    GREEN         = 2,
-	    CYAN          = 3,
-	    RED	          = 4,
-	    MAGENTA       = 5,
-	    BROWN         = 6,
-	    LIGHT_GREY    = 7,
-	    DARK_GREY     = 8,
-	    LIGHT_BLUE    = 9,
-	    LIGHT_GREEN   = 10,
-	    LIGHT_CYAN    = 11,
-	    LIGHT_RED     = 12,
-	    LIGHT_MAGENTA = 13,
-	    LIGHT_BROWN   = 14,
-	    WHITE	      = 15
+        BLACK         = 0,
+        BLUE          = 1,
+        GREEN         = 2,
+        CYAN          = 3,
+        RED	          = 4,
+        MAGENTA       = 5,
+        BROWN         = 6,
+        LIGHT_GREY    = 7,
+        DARK_GREY     = 8,
+        LIGHT_BLUE    = 9,
+        LIGHT_GREEN   = 10,
+        LIGHT_CYAN    = 11,
+        LIGHT_RED     = 12,
+        LIGHT_MAGENTA = 13,
+        LIGHT_BROWN   = 14,
+        WHITE	      = 15
     };
 
     struct Console {
@@ -41,8 +41,8 @@ namespace VGA {
 
         void init();
         void putc(const char c);
-	    void puts(const char * s);
-	    void set_attribs(COLOR_CODE fg, COLOR_CODE bg);
+        void puts(const char * s);
+        void set_attribs(COLOR_CODE fg, COLOR_CODE bg);
         void push_attribs(COLOR_CODE fg, COLOR_CODE bg);
         void pop_attribs();
         void clearline(uint8_t lno);

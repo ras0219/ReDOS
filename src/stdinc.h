@@ -5,8 +5,8 @@
 // debug mode
 #define REDOS_DEBUG
 
+// forgot what this disables, probably not important
 #pragma warning(disable:4127)
-#pragma code_seg(".text$5")
 
 #include "types.h"
 
@@ -23,7 +23,6 @@ extern "C" long _InterlockedExchange(uint32_t * target, uint32_t val);
 #define inb(prt)        ((uint8_t)_inp(prt))
 #define outw(prt, val)  _outpw(prt, val)
 #define inw(prt)        ((uint16_t)_inpw(prt))
-#define getRetAddr      _ReturnAddress
 #pragma intrinsic(_ReturnAddress, _outp, _inp, \
                   _outpw, _inpw, __halt, __lidt, \
                   _InterlockedExchange)

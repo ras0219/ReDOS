@@ -6,7 +6,6 @@
 
 namespace IDT
 {
-
     #pragma pack(push, 1)
     struct IDT_Entry
     {

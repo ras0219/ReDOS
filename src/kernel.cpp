@@ -12,7 +12,17 @@ Memory::PhysFramePool proc_mem;
 Memory::PDirectory * KRNL::kernelpd;
 extern uint32_t __end_of_kernel;
 
-void kernel()
+IDT::IDT_Table KRNL::idt = { 0 };
+GDT::GDT_Table KRNL::gdt = { 0 };
+
+#pragma code_seg(push)
+void dosomething()
+{
+    krnl_mem = proc_mem;
+}
+#pragma code_seg(pop)
+
+void KRNL::kernel()
 {
     cnsl.init();
     cnsl.set_attribs(VGA::WHITE, VGA::BLACK);
@@ -22,12 +32,14 @@ void kernel()
     cnsl.push_attribs(VGA::RED, VGA::BLACK);
     cnsl << "BUSY";
     cnsl.pop_attribs();
-    cnsl << ']';
+    cnsl << ']' << (uint32_t)&dosomething;
 
-    load_default_gdt();
-    KRNL::idt.init();
-    KRNL::idt.load();
+    gdt.init();
+    gdt.load();
+    idt.init();
+    idt.load();
     IRQ::remap_pics();
+    __asm sti
 
     cnsl.push_attribs(VGA::BLUE, VGA::BLACK);
     cnsl << "\b\b\b\b\b OK ";
@@ -47,8 +59,6 @@ void kernel()
     cnsl << "\b\b\b\b\b OK ";
     cnsl.pop_attribs();
     cnsl << "]\r\n";
-
-    __asm sti
 
     cnsl << "Initializing Virtual Memory...      [";
     cnsl.push_attribs(VGA::RED, VGA::BLACK);
@@ -116,5 +126,3 @@ void __declspec(noreturn) RSoD(const char * info, uint32_t status, REGS * _r)
 
     __asm hlt;
 }
-
-IDT::IDT_Table KRNL::idt = { 0 };

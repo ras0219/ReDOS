@@ -1,6 +1,5 @@
 #include "stdinc.h"
 #include "kernel.h"
-#include "stdio.h"
 
 // Disable warning about unary minus on unsigned integers
 #pragma warning(disable:4146)
@@ -10,18 +9,18 @@
 #pragma warning(disable:4512)
 #pragma warning(disable:4610)
 
-// Inject symbol at end of kernel to know size
-#pragma section(".rsrc$9a",read)
-#pragma data_seg(push, ".rsrc$9a")
-//#pragma const_seg(push, ".rsrc$9a")
-
-uint32_t __end_of_kernel = 0;
-
 // Ensure our critical data gets linked in the right order
-#pragma code_seg(push, ".text$1b")
-#pragma data_seg(".text$1a")
-//#pragma const_seg(".text$1a")
-#pragma const_seg(push,".text$1a")
+#pragma comment(linker,"/merge:.text=.two")
+#pragma comment(linker,"/merge:.abs=.two")
+#pragma comment(linker,"/merge:.data=.two")
+#pragma comment(linker,"/merge:.edata=.two")
+#pragma comment(linker,"/merge:.rdata=.two")
+#pragma comment(linker,"/merge:.bss=.two")
+
+#pragma data_seg(push, ".rsrc$")
+// Inject symbol at end of kernel to know size
+uint32_t __end_of_kernel = 0;
+#pragma data_seg(pop)
 
 // Forward declaration
 extern "C" __declspec(noreturn) void __kernel_entry();
@@ -43,7 +42,8 @@ struct MultibootHeader
     const uint32_t depth;
 };
 
-static struct MultibootHeader mbhdr = {
+#pragma data_seg(push, ".abs")
+MultibootHeader mbhdr = {
     0x1BADB002, // magic
     1 << 16, // flags
     -(mbhdr.magic + mbhdr.flags), // checksum
@@ -59,11 +59,7 @@ static struct MultibootHeader mbhdr = {
     0 // depth/**/
 };
 // END MULTIBOOT HEADER
-
 #pragma data_seg(pop)
-#pragma const_seg(pop)
-
-#pragma code_seg(".text$2a")
 
 extern "C" __declspec(naked) __declspec(noreturn) void __kernel_entry()
 {
@@ -80,12 +76,10 @@ extern "C" __declspec(naked) __declspec(noreturn) void __kernel_entry()
         push ebx
     }
 
-    kernel();
+    KRNL::kernel();
 
     for(;;)
     {
         __halt();
     }
 }
-
-#pragma code_seg(pop)
