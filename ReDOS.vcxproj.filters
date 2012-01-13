@@ -16,6 +16,9 @@
     <Filter Include="Misc">
       <UniqueIdentifier>{5dca4f7c-ec50-4386-a7ed-96342d6c60eb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\containers">
+      <UniqueIdentifier>{7a831cde-5cac-4040-bf5b-cd3a65a96793}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vga.h">
@@ -54,6 +57,12 @@
     <ClInclude Include="src\physframe.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\thread.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\deque.h">
+      <Filter>Header Files\containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\start.cpp">
@@ -89,6 +98,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore">
+      <Filter>Misc</Filter>
+    </None>
+    <None Include="README.txt">
       <Filter>Misc</Filter>
     </None>
   </ItemGroup>

@@ -93,8 +93,10 @@
     <ClInclude Include="src\keyboard.h" />
     <ClInclude Include="src\machine.h" />
     <ClInclude Include="src\physframe.h" />
+    <ClInclude Include="src\deque.h" />
     <ClInclude Include="src\stdinc.h" />
     <ClInclude Include="src\stdio.h" />
+    <ClInclude Include="src\thread.h" />
     <ClInclude Include="src\types.h" />
     <ClInclude Include="src\vga.h" />
     <ClInclude Include="src\vmm.h" />
@@ -113,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />
+    <None Include="README.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
