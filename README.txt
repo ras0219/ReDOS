@@ -16,7 +16,7 @@ RUN STEPS
        correctly set up for this purpose.  I know of two ways to transfer the
        image:
         A) Use powerISO available from http://www.poweriso.com/ (shareware)
-        B) Use loopback mounting on a unix-like system. (NOTE: Cygwin does not
+        B) Use loopback mouning on a *nix system. (NOTE: Cygwin does not
            support loopback mounting! Save yourself the trouble!)
        Save ReDOS.exe into the root directory on the disk image.
     3. Now run Bochs using the included bochsrc.bxrc (Obtain Bochs from
